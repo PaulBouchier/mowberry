@@ -43,3 +43,9 @@ receiver.
 ```bash
 ros2 launch mowberry zedf9p_lc29h.launch.py host:=rtk2go.com mountpoint:=VN1 username:=YOUR_EMAIL password:=none authenticate:=true send_nmea:=false
 ```
+
+## ublox_rover_hpposllh_navsatfix.launch.py
+
+A version of the ublox launch file of the same name which launches the
+ublox_dgnss driver node and pulls corrections from topic /rtcm (vs. the
+ntrip_client/rtcm topic which is the default for the ublox launch file.)
