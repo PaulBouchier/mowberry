@@ -104,10 +104,7 @@ class PrintPose(Node):
         z_str = f'{self.z:.2f}' if self.z is not None else 'None'
 
         # Print to stdout/logger
-        output_str = (
-            f'{self.fix_type}, X: {x_str}, Y: {y_str}, Z: {z_str}, '
-            f'std_dev: {self.std_dev_str}'
-        )
+        output_str = ( f'{self.fix_type}, X: {x_str}, Y: {y_str} ')
 
         verbose = self.get_parameter('verbose').value
         if verbose:
