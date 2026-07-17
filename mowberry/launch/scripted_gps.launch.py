@@ -23,13 +23,15 @@ def generate_launch_description():
 
     ntrip_host_arg = DeclareLaunchArgument(
         'ntrip_host',
-        default_value='rtk2go.com',
+        #default_value='rtk2go.com',
+        default_value='192.168.4.252',
         description='NTRIP host'
     )
 
     ntrip_mountpoint_arg = DeclareLaunchArgument(
         'ntrip_mountpoint',
-        default_value='VN1',
+        #default_value='VN1',
+        default_value='LittleElm_L1L5',
         description='NTRIP mountpoint'
     )
 
