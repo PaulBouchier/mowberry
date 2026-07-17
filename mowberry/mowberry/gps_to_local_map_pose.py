@@ -20,8 +20,13 @@ class Gps2LocalMapPose(Node):
         self.origin_alt = self.get_parameter('origin_alt').value
 
         self.get_logger().info(
-            f"Using FIXED origin: lat={self.origin_lat}, lon={self.origin_lon}, alt={self.origin_alt}"
+            f"gps_to_local_map_pose: Using FIXED origin: lat={self.origin_lat}, lon={self.origin_lon}, alt={self.origin_alt}"
         )
+
+        self.last_pose = PoseStamped()
+        self.pose_msg_count = 0
+        self.gps_heading = 0.0
+        self.q = self.quaternion_from_euler(0.0, 0.0, 0.0)
 
         # Subscriber
         # Define a BEST_EFFORT QoS profile for subscriptions
@@ -66,7 +71,22 @@ class Gps2LocalMapPose(Node):
         pose.pose.position.y = dy
         pose.pose.position.z = dz
 
-        pose.pose.orientation.w = 1.0  # Identity quaternion
+        self.pose_msg_count += 1
+
+        if self.pose_msg_count > 1:
+            delta_x = pose.pose.position.x - self.last_pose.pose.position.x
+            delta_y = pose.pose.position.y - self.last_pose.pose.position.y
+            dist_moved = math.sqrt(delta_x**2 + delta_y**2)
+
+            if dist_moved > 0.05:  # must have moved at least 5cm to calculate new heading
+                self.gps_heading = math.atan2(delta_y, delta_x)  # -pi to +pi from East
+                self.q = self.quaternion_from_euler(0.0, 0.0, self.gps_heading)
+
+        pose.pose.orientation.x = self.q[0]
+        pose.pose.orientation.y = self.q[1]
+        pose.pose.orientation.z = self.q[2]
+        pose.pose.orientation.w = self.q[3]
+        self.last_pose = pose
 
         self.pub.publish(pose)
 
