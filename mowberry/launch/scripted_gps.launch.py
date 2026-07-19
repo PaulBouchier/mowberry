@@ -21,26 +21,6 @@ def generate_launch_description():
         description='Serial port for GPS device'
     )
 
-    ntrip_host_arg = DeclareLaunchArgument(
-        'ntrip_host',
-        #default_value='rtk2go.com',
-        default_value='192.168.4.252',
-        description='NTRIP host'
-    )
-
-    ntrip_mountpoint_arg = DeclareLaunchArgument(
-        'ntrip_mountpoint',
-        #default_value='VN1',
-        default_value='LittleElm_L1L5',
-        description='NTRIP mountpoint'
-    )
-
-    ntrip_username_arg = DeclareLaunchArgument(
-        'ntrip_username',
-        default_value='paul.bouchier-at-gmail-d-com',
-        description='NTRIP username'
-    )
-
     origin_lat_arg = DeclareLaunchArgument(
         'origin_lat',
         default_value='33.15777543',
@@ -90,13 +70,18 @@ def generate_launch_description():
             )
         ),
         launch_arguments={
-            'port': LaunchConfiguration('gps_port'),
-            'ntrip_host': LaunchConfiguration('ntrip_host'),
-            'ntrip_mountpoint': LaunchConfiguration('ntrip_mountpoint'),
-            'ntrip_username': LaunchConfiguration('ntrip_username')
+            'port': LaunchConfiguration('gps_port')
         }.items()
     )
 
+    # Node that receives GPS corrections via UDP and publishes them
+    rx_udp_corrections_node = Node(
+        package='mowberry',
+        executable='rx_udp_corrections',
+        name='rx_udp_corrections',
+        output='screen'
+    )
+    
     # Node that maps GPS coordinates to local map coordinates.
     # One would run it manually like this:
     # ros2 run mowberry gps_to_local_map_pose --ros-args -p origin_lat:=33.15777543 -p origin_lon:=-96.93730808 -p origin_alt:=169.54
@@ -115,9 +100,6 @@ def generate_launch_description():
     return LaunchDescription([
         # Launch Arguments
         gps_port_arg,
-        ntrip_host_arg,
-        ntrip_mountpoint_arg,
-        ntrip_username_arg,
         base_serial_port_arg,
         origin_lat_arg,
         origin_lon_arg,
@@ -126,5 +108,6 @@ def generate_launch_description():
         # Nodes and Included Launches
         lc29h_da_rtk_gps_driver_node,
         bringup_launch,
+        rx_udp_corrections_node,
         gps_to_local_map_pose_node
     ])
