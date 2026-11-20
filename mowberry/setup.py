@@ -31,7 +31,7 @@ setup(
             'print_zedf9p_pos = mowberry.print_zedf9p_pos:main',
             'gps_to_local_map_pose = mowberry.gps_to_local_map_pose:main',
             'print_map_pose = mowberry.print_map_pose:main',
-            'rx_udp_corrections = mowberry.rx_udp_corrections:main'
+            'rx_lc_corr_udp = mowberry.rx_lc_corr_udp:main'
         ],
     },
 )

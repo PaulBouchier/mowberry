@@ -11,7 +11,7 @@ class RtcmUdpReceiver(Node):
         
         # Declare parameters
         self.declare_parameter('listen_ip', '0.0.0.0')
-        self.declare_parameter('listen_port', 5000)
+        self.declare_parameter('listen_port', 5050)
         self.declare_parameter('expected_hz', 1.0)
         
         listen_ip = self.get_parameter('listen_ip').get_parameter_value().string_value

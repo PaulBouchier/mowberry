@@ -24,6 +24,17 @@ get it to publish NavSatFix with llh.
 ros2 run lc29h_da_rtk_gps_driver print_pos --ros-args -p verbose:=true -r /gps/fix:=/fix
 ```
 
+## send_lc_corr_udp
+
+A non-ROS script that reads corrections from an LC29H(BA) and sends them to the matching
+UDP receiver script rx_lc_corr_udp. It is intended to run on pizero.
+
+## rx_lc_corr_udp
+
+A ROS node which receives corrections sent by UDP from send_lc_corr_udp.py and publishes them
+to /rtcm. It also publishes diagnostic messages with status of data received, and warns if
+the rate falls below the expected 1 Hz - useful for detecting loss of corrections.
+
 # Launch files
 
 ## zedf9p_lc29h.launch.py
@@ -49,3 +60,11 @@ ros2 launch mowberry zedf9p_lc29h.launch.py host:=rtk2go.com mountpoint:=VN1 use
 A version of the ublox launch file of the same name which launches the
 ublox_dgnss driver node and pulls corrections from topic /rtcm (vs. the
 ntrip_client/rtcm topic which is the default for the ublox launch file.)
+
+## bu_lc.launch.py
+
+Launches:
+- linorobot2_bringup bringup.launch.py with the serial port set for mowberry
+- lc29h(DA) gps receiver node
+- rx_lc_corr_udp corrections receiver node
+- gps_to_local_map_pose node with arguments that convert the received lat/lon to X/Y referenced to some point defined in parameters

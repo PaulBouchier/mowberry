@@ -46,7 +46,7 @@ if __name__ == "__main__":
     SERIAL_PORT = "/dev/ttyUSB0"
     BAUD_RATE = 921600
     FORWARD_IP = "100.102.100.25"   # IP of the receiver script or caster
-    FORWARD_PORT = 5000        # Target UDP port
+    FORWARD_PORT = 5050        # Target UDP port
     
     serial_to_udp_relay(SERIAL_PORT, BAUD_RATE, FORWARD_IP, FORWARD_PORT)
 

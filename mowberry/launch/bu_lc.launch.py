@@ -75,10 +75,10 @@ def generate_launch_description():
     )
 
     # Node that receives GPS corrections via UDP and publishes them
-    rx_udp_corrections_node = Node(
+    rx_lc_corr_udp_node = Node(
         package='mowberry',
-        executable='rx_udp_corrections',
-        name='rx_udp_corrections',
+        executable='rx_lc_corr_udp',
+        name='rx_lc_corr_udp',
         output='screen'
     )
     
@@ -108,6 +108,6 @@ def generate_launch_description():
         # Nodes and Included Launches
         lc29h_da_rtk_gps_driver_node,
         bringup_launch,
-        rx_udp_corrections_node,
+        rx_lc_corr_udp_node,
         gps_to_local_map_pose_node
     ])

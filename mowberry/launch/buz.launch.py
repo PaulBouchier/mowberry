@@ -1,4 +1,4 @@
-"""bug: BringUp with GPS.
+"""buz: BringUp with ZEDF9P GPS.
 
 Equivalent to running:
   ros2 launch mowberry zedf9p_ntrip.launch.py
