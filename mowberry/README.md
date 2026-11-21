@@ -37,6 +37,32 @@ the rate falls below the expected 1 Hz - useful for detecting loss of correction
 
 # Launch files
 
+## buz.launch.py - Bringup mowberry with zedf9p GPS
+
+Launches:
+- linorobot2_bringup bringup.launch.py with serial port pointing to ESP32
+- Includes zedf9p_ntrip.launch.py - see documentation below
+
+## zedf9p_ntrip.launch.py
+
+Launches zedf9p and ntrip connected by default to VN1 on rtk2go
+
+Status: not fully checked out with zedf9p. zedf9p needs some topic remapping to connect to fusioncore. Launches  zedf9p_gps_xy_node which consumes /fix (NavSatFix) and emits /gps/zedf9p_xy - the xy delta from the local origin
+
+## bu_lc.launch.py
+
+Launches:
+- linorobot2_bringup bringup.launch.py with the serial port set for mowberry
+- lc29h(DA) gps receiver node
+- rx_lc_corr_udp corrections receiver node
+- gps_to_local_map_pose node with arguments that convert the received lat/lon to X/Y referenced to some point defined in parameters
+
+## ublox_rover_hpposllh_navsatfix.launch.py
+
+A version of the ublox launch file of the same name which launches the
+ublox_dgnss driver node and pulls corrections from topic /rtcm (vs. the
+ntrip_client/rtcm topic which is the default for the ublox launch file.)
+
 ## zedf9p_lc29h.launch.py
 
 This launch file runs both a ZED-F9P and a LC29H(DA) GPS receiver side by side, and feeds them both corrections from an ntrip_client it starts. It
@@ -55,16 +81,3 @@ receiver.
 ros2 launch mowberry zedf9p_lc29h.launch.py host:=rtk2go.com mountpoint:=VN1 username:=YOUR_EMAIL password:=none authenticate:=true send_nmea:=false
 ```
 
-## ublox_rover_hpposllh_navsatfix.launch.py
-
-A version of the ublox launch file of the same name which launches the
-ublox_dgnss driver node and pulls corrections from topic /rtcm (vs. the
-ntrip_client/rtcm topic which is the default for the ublox launch file.)
-
-## bu_lc.launch.py
-
-Launches:
-- linorobot2_bringup bringup.launch.py with the serial port set for mowberry
-- lc29h(DA) gps receiver node
-- rx_lc_corr_udp corrections receiver node
-- gps_to_local_map_pose node with arguments that convert the received lat/lon to X/Y referenced to some point defined in parameters
